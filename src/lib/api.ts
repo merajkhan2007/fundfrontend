@@ -11,7 +11,8 @@ api.interceptors.request.use((config) => {
     if (typeof window !== 'undefined') {
         const token = localStorage.getItem('token');
         if (token) {
-            config.headers.Authorization = `Bearer ${token}`;
+            config.headers = config.headers || {};
+            config.headers['Authorization'] = `Bearer ${token}`;
         }
     }
     return config;
@@ -21,9 +22,11 @@ api.interceptors.response.use(
     (response) => response,
     (error) => {
         if (error.response?.status === 401 && typeof window !== 'undefined') {
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
-            window.location.href = '/login';
+            console.error("401 Unauthorized Response in Interceptor:", error.config?.url);
+            // We temporarily don't clear localStorage/redirect so the user can debug the specific 401 source
+            // localStorage.removeItem('token');
+            // localStorage.removeItem('user');
+            // window.location.href = '/login';
         }
         return Promise.reject(error);
     }
