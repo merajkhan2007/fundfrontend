@@ -4,12 +4,14 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
+import { Menu, X } from 'lucide-react';
 
 export function Navbar() {
     const pathname = usePathname();
     const router = useRouter();
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [userRole, setUserRole] = useState<'ADMIN' | 'MEMBER' | null>(null);
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     // Re-check auth state when path changes
     useEffect(() => {
@@ -36,12 +38,18 @@ export function Navbar() {
         localStorage.removeItem('user');
         setIsLoggedIn(false);
         setUserRole(null);
+        setIsMobileMenuOpen(false);
         router.push('/login');
     };
 
+    // Close mobile menu when navigating
+    useEffect(() => {
+        setIsMobileMenuOpen(false);
+    }, [pathname]);
+
     return (
         <div className="fixed top-0 left-0 right-0 z-50 flex justify-center pt-4 px-4 pointer-events-none">
-            <nav className="glass w-full max-w-5xl rounded-full border border-primary/20 bg-background/60 shadow-lg shadow-primary/5 pointer-events-auto backdrop-blur-xl transition-all duration-300 hover:shadow-primary/10 hover:border-primary/30">
+            <nav className={`glass w-full max-w-5xl rounded-3xl border border-primary/20 bg-background/60 shadow-lg shadow-primary/5 pointer-events-auto backdrop-blur-xl transition-all duration-300 hover:shadow-primary/10 hover:border-primary/30 ${isMobileMenuOpen ? 'pb-4' : ''}`}>
                 <div className="flex h-16 items-center justify-between px-6">
                     {/* Logo Section */}
                     <Link href="/" className="flex items-center gap-2 group">
@@ -53,12 +61,12 @@ export function Navbar() {
                         </span>
                     </Link>
 
-                    {/* Navigation Actions */}
-                    <div className="flex items-center space-x-2 md:space-x-4">
+                    {/* Desktop Navigation Actions */}
+                    <div className="hidden sm:flex items-center space-x-2 md:space-x-4">
                         {isLoggedIn ? (
                             <>
                                 <Link href={userRole === 'ADMIN' ? '/admin/dashboard' : '/member/dashboard'}>
-                                    <Button variant="ghost" className="hidden sm:flex rounded-full text-sm font-medium hover:bg-primary/10 hover:text-primary transition-all">
+                                    <Button variant="ghost" className="rounded-full text-sm font-medium hover:bg-primary/10 hover:text-primary transition-all">
                                         Dashboard
                                     </Button>
                                 </Link>
@@ -73,7 +81,7 @@ export function Navbar() {
                         ) : (
                             <>
                                 <Link href="/login">
-                                    <Button variant="ghost" className="rounded-full hidden sm:flex font-medium hover:bg-primary/10 hover:text-primary transition-all">
+                                    <Button variant="ghost" className="rounded-full font-medium hover:bg-primary/10 hover:text-primary transition-all">
                                         Log in
                                     </Button>
                                 </Link>
@@ -85,7 +93,54 @@ export function Navbar() {
                             </>
                         )}
                     </div>
+
+                    {/* Mobile Menu Toggle */}
+                    <div className="sm:hidden flex items-center">
+                        <Button 
+                            variant="ghost" 
+                            size="icon" 
+                            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                            className="rounded-full hover:bg-primary/10 hover:text-primary transition-all"
+                        >
+                            {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+                        </Button>
+                    </div>
                 </div>
+
+                {/* Mobile Menu Dropdown */}
+                {isMobileMenuOpen && (
+                    <div className="sm:hidden flex flex-col items-center space-y-3 px-6 pb-2 pt-2 border-t border-primary/10 animate-in slide-in-from-top-4 duration-300">
+                        {isLoggedIn ? (
+                            <>
+                                <Link href={userRole === 'ADMIN' ? '/admin/dashboard' : '/member/dashboard'} className="w-full">
+                                    <Button variant="ghost" className="w-full rounded-full text-sm font-medium hover:bg-primary/10 hover:text-primary transition-all">
+                                        Dashboard
+                                    </Button>
+                                </Link>
+                                <Button
+                                    variant="outline"
+                                    onClick={handleLogout}
+                                    className="w-full rounded-full border-primary/20 hover:bg-destructive/10 hover:text-destructive hover:border-destructive/30 transition-all font-medium"
+                                >
+                                    Log out
+                                </Button>
+                            </>
+                        ) : (
+                            <>
+                                <Link href="/login" className="w-full">
+                                    <Button variant="ghost" className="w-full rounded-full font-medium hover:bg-primary/10 hover:text-primary transition-all">
+                                        Log in
+                                    </Button>
+                                </Link>
+                                <Link href="/register" className="w-full">
+                                    <Button className="w-full rounded-full bg-gradient-to-r from-primary to-secondary text-primary-foreground hover:shadow-lg hover:shadow-primary/30 transition-all border-0 font-semibold">
+                                        Get Started
+                                    </Button>
+                                </Link>
+                            </>
+                        )}
+                    </div>
+                )}
             </nav>
         </div>
     );
