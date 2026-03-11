@@ -67,6 +67,21 @@ export default function AdminMembersPage() {
         }
     };
 
+    const handleDelete = async (id: number) => {
+        if (!window.confirm("Are you sure you want to permanently delete this member? All their data (deposits, loans, etc.) will be lost. This action cannot be undone.")) {
+            return;
+        }
+        try {
+            setLoading(true);
+            await api.delete(`/members/${id}`);
+            toast.success('Member permanently deleted');
+            fetchMembers();
+        } catch (error) {
+            toast.error('Failed to delete member');
+            setLoading(false);
+        }
+    };
+
     const handleViewProfile = async (id: number) => {
         try {
             setProfileLoading(true);
@@ -133,14 +148,24 @@ export default function AdminMembersPage() {
                                             <Button variant="outline" size="sm" className="rounded-full shadow-sm">Edit</Button>
                                         </Link>
                                         {member.role !== 'ADMIN' && (
-                                            <Button
-                                                variant={member.status === 'ACTIVE' ? "destructive" : "outline"}
-                                                size="sm"
-                                                className="rounded-full shadow-sm"
-                                                onClick={() => toggleStatus(member.id, member.status)}
-                                            >
-                                                {member.status === 'ACTIVE' ? 'Deactivate' : 'Activate'}
-                                            </Button>
+                                            <>
+                                                <Button
+                                                    variant={member.status === 'ACTIVE' ? "destructive" : "outline"}
+                                                    size="sm"
+                                                    className="rounded-full shadow-sm"
+                                                    onClick={() => toggleStatus(member.id, member.status)}
+                                                >
+                                                    {member.status === 'ACTIVE' ? 'Deactivate' : 'Activate'}
+                                                </Button>
+                                                <Button
+                                                    variant="destructive"
+                                                    size="sm"
+                                                    className="rounded-full shadow-sm"
+                                                    onClick={() => handleDelete(member.id)}
+                                                >
+                                                    Delete
+                                                </Button>
+                                            </>
                                         )}
                                     </TableCell>
                                 </TableRow>
