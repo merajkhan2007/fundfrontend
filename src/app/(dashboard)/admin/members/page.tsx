@@ -82,18 +82,19 @@ export default function AdminMembersPage() {
     if (loading) return <div className="p-8 text-center text-muted-foreground">Loading members...</div>;
 
     return (
-        <div className="container p-6 max-w-7xl mx-auto space-y-6">
-            <div className="flex items-center justify-between">
+        <div className="container p-4 md:p-6 max-w-7xl mx-auto space-y-6 animate-in fade-in zoom-in-95 duration-500">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <h1 className="text-3xl font-bold tracking-tight">Manage Members</h1>
                 <Link href="/admin/members/add">
                     <Button>Add New Member</Button>
                 </Link>
             </div>
 
-            <Card>
-                <CardContent className="p-0">
+            <Card className="glass overflow-hidden border-primary/10 shadow-lg shadow-primary/5">
+                <CardContent className="p-0 sm:p-2">
+                    <div className="rounded-xl overflow-hidden border border-border/50 bg-background/50">
                     <Table>
-                        <TableHeader>
+                        <TableHeader className="bg-muted/50">
                             <TableRow>
                                 <TableHead>Name</TableHead>
                                 <TableHead>Contact</TableHead>
@@ -124,17 +125,18 @@ export default function AdminMembersPage() {
                                             {member.status}
                                         </Badge>
                                     </TableCell>
-                                    <TableCell className="text-right space-x-2">
-                                        <Button variant="outline" size="sm" onClick={() => handleViewProfile(member.id)} disabled={profileLoading}>
+                                    <TableCell className="text-right space-x-2 whitespace-nowrap">
+                                        <Button variant="outline" size="sm" className="rounded-full shadow-sm" onClick={() => handleViewProfile(member.id)} disabled={profileLoading}>
                                             View
                                         </Button>
                                         <Link href={`/admin/members/${member.id}/edit`}>
-                                            <Button variant="outline" size="sm">Edit</Button>
+                                            <Button variant="outline" size="sm" className="rounded-full shadow-sm">Edit</Button>
                                         </Link>
                                         {member.role !== 'ADMIN' && (
                                             <Button
                                                 variant={member.status === 'ACTIVE' ? "destructive" : "outline"}
                                                 size="sm"
+                                                className="rounded-full shadow-sm"
                                                 onClick={() => toggleStatus(member.id, member.status)}
                                             >
                                                 {member.status === 'ACTIVE' ? 'Deactivate' : 'Activate'}
@@ -146,21 +148,22 @@ export default function AdminMembersPage() {
                             {members.length === 0 && (
                                 <TableRow>
                                     <TableCell colSpan={6} className="h-24 text-center">
-                                        No members found.
                                     </TableCell>
                                 </TableRow>
                             )}
                         </TableBody>
                     </Table>
+                    </div>
                 </CardContent>
             </Card>
 
             {/* View Profile Dialog */}
             <Dialog open={!!viewingMember} onOpenChange={(open) => !open && setViewingMember(null)}>
-                <DialogContent className="sm:max-w-[550px]">
+                <DialogContent className="sm:max-w-[550px] glass p-0 overflow-hidden border-primary/20">
+                    <div className="p-6 bg-gradient-to-br from-background/80 to-muted/80 backdrop-blur-xl">
                     <DialogHeader>
-                        <DialogTitle className="text-2xl">Member Profile</DialogTitle>
-                        <DialogDescription>
+                        <DialogTitle className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">Member Profile</DialogTitle>
+                        <DialogDescription className="text-muted-foreground font-medium">
                             Overview of the member's details and contributions.
                         </DialogDescription>
                     </DialogHeader>
@@ -203,7 +206,8 @@ export default function AdminMembersPage() {
                             <div className="border-t border-border/50 pt-5">
                                 <h4 className="text-sm font-semibold mb-4 text-foreground/80 tracking-tight">Financial Overview</h4>
                                 <div className="grid grid-cols-2 gap-4">
-                                    <Card className="bg-primary/5 border-primary/20 shadow-none">
+                                    <Card className="glass relative overflow-hidden group">
+                                         <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                                         <CardContent className="p-4 flex flex-col justify-center">
                                             <div className="text-xs font-semibold text-primary/80 uppercase tracking-wider mb-1">Total Deposited</div>
                                             <div className="text-3xl font-bold text-primary">
@@ -211,7 +215,8 @@ export default function AdminMembersPage() {
                                             </div>
                                         </CardContent>
                                     </Card>
-                                    <Card className="bg-secondary/5 border-secondary/20 shadow-none">
+                                    <Card className="glass relative overflow-hidden group">
+                                        <div className="absolute inset-0 bg-gradient-to-br from-secondary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                                         <CardContent className="p-4 flex flex-col justify-center">
                                             <div className="text-xs font-semibold text-secondary-foreground/70 uppercase tracking-wider mb-1">Monthly Target</div>
                                             <div className="text-3xl font-bold text-secondary-foreground">
@@ -223,6 +228,7 @@ export default function AdminMembersPage() {
                             </div>
                         </div>
                     )}
+                    </div>
                 </DialogContent>
             </Dialog>
         </div>

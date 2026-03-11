@@ -19,8 +19,15 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className} suppressHydrationWarning>
+        {/* Ambient Background Splashes */}
+        <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10">
+          <div className="bg-blob bg-primary/30 w-[500px] h-[500px] top-[-10%] left-[-10%]" />
+          <div className="bg-blob bg-secondary/20 w-[600px] h-[600px] bottom-[-20%] right-[-10%] animation-delay-2000" />
+          <div className="bg-blob bg-accent/20 w-[400px] h-[400px] top-[40%] left-[60%] animation-delay-4000" />
+        </div>
+        
         <Navbar />
-        <main className="min-h-screen bg-gradient-to-br from-background via-muted to-background bg-gradient-animate pb-12">
+        <main className="min-h-screen bg-background/40 pb-12">
           {children}
         </main>
         <Toaster />

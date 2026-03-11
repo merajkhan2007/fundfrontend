@@ -169,6 +169,17 @@
     background-size: 100% 100%;
     /* Removed animation: gradient-flow 15s ease infinite; to prevent massive repaints */
   }
+
+  .bg-blob {
+    @apply absolute rounded-full filter blur-[100px] opacity-30 mix-blend-multiply dark:mix-blend-screen;
+    animation: float 20s infinite alternate;
+  }
+}
+
+@keyframes float {
+  0% { transform: translateY(0px) scale(1); }
+  50% { transform: translateY(-50px) scale(1.1); }
+  100% { transform: translateY(20px) scale(0.9); }
 }
 
 /* Reduced animation keyframes since it's no longer infinitely flowing */

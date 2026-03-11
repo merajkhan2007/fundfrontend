@@ -122,20 +122,21 @@ export default function MemberDepositsPage() {
     });
 
     return (
-        <div className="container p-6 max-w-6xl mx-auto space-y-8">
+        <div className="container p-4 md:p-6 max-w-6xl mx-auto space-y-8 animate-in fade-in zoom-in-95 duration-500">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
                     <h1 className="text-3xl font-bold tracking-tight">My Deposits</h1>
-                    <p className="text-muted-foreground mt-1">View your contribution history and submit new payments.</p>
+                    <p className="text-muted-foreground mt-1 font-medium">View your contribution history and submit new payments.</p>
                 </div>
 
                 <Dialog open={open} onOpenChange={setOpen}>
                     <DialogTrigger>
-                        <Button type="button">Record New Deposit</Button>
+                        <Button className="rounded-full shadow-sm px-6 font-semibold tracking-wide">Record New Deposit</Button>
                     </DialogTrigger>
-                    <DialogContent className="sm:max-w-[425px]">
+                    <DialogContent className="sm:max-w-[425px] glass border-primary/20 overflow-hidden p-0">
+                        <div className="p-6 bg-gradient-to-br from-background/80 to-muted/80 backdrop-blur-xl">
                         <DialogHeader>
-                            <DialogTitle>Submit Contribution</DialogTitle>
+                            <DialogTitle className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">Submit Contribution</DialogTitle>
                         </DialogHeader>
                         <form onSubmit={handleSubmitDeposit} className="space-y-4 mt-4">
                             <div className="grid grid-cols-2 gap-4">
@@ -199,23 +200,24 @@ export default function MemberDepositsPage() {
                                     placeholder="Optional notes or UTR / UPI Ref if Online"
                                 />
                             </div>
-                            <Button type="submit" className="w-full" disabled={isSubmitting}>
+                            <Button type="submit" className="w-full rounded-full shadow-md font-semibold mt-6" disabled={isSubmitting}>
                                 {isSubmitting ? 'Submitting...' : 'Submit Deposit'}
                             </Button>
                         </form>
+                        </div>
                     </DialogContent>
                 </Dialog>
             </div>
 
-            <Card>
-                <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 space-y-0">
-                    <CardTitle>Deposit History</CardTitle>
+            <Card className="glass overflow-hidden border-primary/10 shadow-lg shadow-primary/5">
+                <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 space-y-0 border-b border-border/50 pb-4">
+                    <CardTitle className="text-xl">Deposit History</CardTitle>
                     <div className="flex gap-2">
                         <Select value={statusFilter} onValueChange={(val) => val && setStatusFilter(val)}>
-                            <SelectTrigger className="w-[140px]">
+                            <SelectTrigger className="w-[140px] rounded-full bg-background/50">
                                 <SelectValue placeholder="Status" />
                             </SelectTrigger>
-                            <SelectContent>
+                            <SelectContent className="glass">
                                 <SelectItem value="ALL">All Statuses</SelectItem>
                                 <SelectItem value="PENDING">Pending</SelectItem>
                                 <SelectItem value="PAID">Paid</SelectItem>
@@ -223,10 +225,10 @@ export default function MemberDepositsPage() {
                             </SelectContent>
                         </Select>
                         <Select value={yearFilter} onValueChange={(val) => val && setYearFilter(val)}>
-                            <SelectTrigger className="w-[120px]">
+                            <SelectTrigger className="w-[120px] rounded-full bg-background/50">
                                 <SelectValue placeholder="Year" />
                             </SelectTrigger>
-                            <SelectContent>
+                            <SelectContent className="glass">
                                 <SelectItem value="ALL">All Years</SelectItem>
                                 {uniqueYears.map(year => (
                                     <SelectItem key={year} value={year}>{year}</SelectItem>
@@ -235,14 +237,20 @@ export default function MemberDepositsPage() {
                         </Select>
                     </div>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="p-0 sm:p-2">
                     {!filteredDeposits.length ? (
-                        <div className="text-center py-8 text-muted-foreground">
-                            No deposits found matching the filters.
+                        <div className="text-center py-12 text-muted-foreground flex flex-col items-center justify-center">
+                            <div className="bg-muted/30 p-4 rounded-full mb-3">
+                                <svg className="w-8 h-8 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+                                </svg>
+                            </div>
+                            <p className="font-medium text-foreground">No deposits found matching the filters.</p>
                         </div>
                     ) : (
+                        <div className="rounded-xl overflow-hidden border border-border/50 bg-background/50 m-2">
                         <Table>
-                            <TableHeader>
+                            <TableHeader className="bg-muted/50">
                                 <TableRow>
                                     <TableHead>Date</TableHead>
                                     <TableHead>Month</TableHead>
@@ -262,7 +270,7 @@ export default function MemberDepositsPage() {
                                         </TableCell>
                                         <TableCell>
                                             <Badge variant={deposit.status === 'PAID' ? 'default' : deposit.status === 'PENDING' ? 'secondary' : 'destructive'}
-                                                className={deposit.status === 'PAID' ? 'bg-green-100 text-green-800 hover:bg-green-100 dark:bg-green-900 dark:text-green-100' : ''}>
+                                                className={`font-semibold ${deposit.status === 'PAID' ? 'bg-green-500/10 text-green-700 border-green-500/20 hover:bg-green-500/20 dark:text-green-400' : ''}`}>
                                                 {deposit.status}
                                             </Badge>
                                         </TableCell>
@@ -270,6 +278,7 @@ export default function MemberDepositsPage() {
                                 ))}
                             </TableBody>
                         </Table>
+                        </div>
                     )}
                 </CardContent>
             </Card>

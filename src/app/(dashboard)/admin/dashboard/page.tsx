@@ -58,8 +58,8 @@ export default function AdminDashboard() {
     }
 
     return (
-        <div className="container p-6 max-w-7xl mx-auto space-y-8">
-            <div className="flex items-center justify-between">
+        <div className="container p-4 md:p-6 max-w-7xl mx-auto space-y-8 animate-in fade-in zoom-in-95 duration-500">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <h1 className="text-3xl font-bold tracking-tight">Admin Dashboard</h1>
                 <div className="space-x-2">
                     <Link href="/admin/members">
@@ -71,50 +71,65 @@ export default function AdminDashboard() {
                 </div>
             </div>
 
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                <Card className="bg-primary text-primary-foreground">
+
+
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+                <Card className="glass relative overflow-hidden group">
+                    <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-secondary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                         <CardTitle className="text-sm font-medium">Total MAQASIDFund</CardTitle>
                         <Wallet className="h-4 w-4 text-primary-foreground/80" />
                     </CardHeader>
                     <CardContent>
-                        <div className="text-3xl font-bold">INR {data?.totalFund?.toFixed(2) || '0.00'}</div>
-                        <p className="text-xs text-muted-foreground">Current available balance</p>
+                        <div className="text-3xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+                            INR {data?.totalFund?.toFixed(2) || '0.00'}
+                        </div>
+                        <p className="text-xs text-muted-foreground mt-1 font-medium">Available balance</p>
                     </CardContent>
                 </Card>
 
-                <Card>
+                <Card className="glass relative overflow-hidden group">
+                    <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                         <CardTitle className="text-sm font-medium">Total Deposits</CardTitle>
                         <IndianRupee className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold">INR {data?.totalDeposits?.toFixed(2) || '0.00'}</div>
+                        <div className="text-2xl font-bold text-foreground">
+                            INR {data?.totalDeposits?.toFixed(2) || '0.00'}
+                        </div>
                     </CardContent>
                 </Card>
 
-                <Card>
+                <Card className="glass relative overflow-hidden group">
+                    <div className="absolute inset-0 bg-gradient-to-br from-amber-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                         <CardTitle className="text-sm font-medium">Active Loans Out</CardTitle>
                         <Activity className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold">INR {data?.totalActiveLoans?.toFixed(2) || '0.00'}</div>
-                        <p className="text-xs text-muted-foreground">Distributed to members</p>
+                        <div className="text-2xl font-bold text-foreground">
+                            INR {data?.totalActiveLoans?.toFixed(2) || '0.00'}
+                        </div>
+                        <p className="text-xs text-muted-foreground mt-1">Currently distributed</p>
                     </CardContent>
                 </Card>
 
-                <Card>
+                <Card className="glass relative overflow-hidden group">
+                    <div className="absolute inset-0 bg-gradient-to-br from-green-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                         <CardTitle className="text-sm font-medium">Total Members</CardTitle>
                         <Users className="h-4 w-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold">{data?.totalMembers || 0}</div>
+                        <div className="text-2xl font-bold text-foreground">{data?.totalMembers || 0}</div>
                     </CardContent>
                 </Card>
 
-                <Card className={data?.pendingPayments ? "border-red-200 bg-red-50 dark:bg-red-950/20" : ""}>
+                <Card className={`glass relative overflow-hidden group ${data?.pendingPayments ? "border-red-500/30 bg-red-500/5" : ""}`}>
+                    {data?.pendingPayments ? (
+                         <div className="absolute inset-0 bg-gradient-to-br from-red-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                    ) : null}
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                         <CardTitle className={`text-sm font-medium ${data?.pendingPayments ? 'text-red-800 dark:text-red-200' : ''}`}>
                             Pending Payments
@@ -133,9 +148,8 @@ export default function AdminDashboard() {
                     </CardContent>
                 </Card>
             </div>
-
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-                <Card className="col-span-4">
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-7">
+                <Card className="glass col-span-1 lg:col-span-4 flex flex-col">
                     <CardHeader>
                         <CardTitle>Monthly Contribution Growth</CardTitle>
                     </CardHeader>
@@ -152,19 +166,19 @@ export default function AdminDashboard() {
                     </CardContent>
                 </Card>
 
-                <Card className="col-span-3">
+                <Card className="glass col-span-1 lg:col-span-3 flex flex-col">
                     <CardHeader>
                         <CardTitle>Quick Actions</CardTitle>
                     </CardHeader>
-                    <CardContent className="space-y-4">
-                        <Link href="/admin/members/add" className="w-full">
-                            <Button className="w-full justify-start" variant="outline">Add New Member</Button>
+                    <CardContent className="space-y-4 flex-1">
+                        <Link href="/admin/members/add" className="w-full block">
+                            <Button className="w-full justify-start rounded-xl font-medium" variant="outline" size="lg">Add New Member</Button>
                         </Link>
-                        <Link href="/admin/deposits" className="w-full">
-                            <Button className="w-full justify-start" variant="outline">Verify Pending Deposits</Button>
+                        <Link href="/admin/deposits" className="w-full block">
+                            <Button className="w-full justify-start rounded-xl font-medium" variant="outline" size="lg">Verify Pending Deposits</Button>
                         </Link>
-                        <Link href="/admin/loans" className="w-full">
-                            <Button className="w-full justify-start" variant="outline">Review Loan Applications</Button>
+                        <Link href="/admin/loans" className="w-full block">
+                            <Button className="w-full justify-start rounded-xl font-medium" variant="outline" size="lg">Review Loan Applications</Button>
                         </Link>
                         <Button className="w-full justify-start text-blue-600 border-blue-200 hover:bg-blue-50 dark:border-blue-900 dark:text-blue-400 dark:hover:bg-blue-950/50" variant="outline">
                             Send Monthly Reminders (Email)
