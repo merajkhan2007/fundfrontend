@@ -62,7 +62,7 @@ export function Navbar() {
                     </Link>
 
                     {/* Desktop Navigation Actions */}
-                    <div className="hidden sm:flex items-center space-x-2 md:space-x-4">
+                    <div className="hidden lg:flex items-center space-x-2 md:space-x-4">
                         {isLoggedIn ? (
                             <>
                                 <Link href={userRole === 'ADMIN' ? '/admin/dashboard' : '/member/dashboard'}>
@@ -95,7 +95,7 @@ export function Navbar() {
                     </div>
 
                     {/* Mobile Menu Toggle */}
-                    <div className="sm:hidden flex items-center">
+                    <div className="lg:hidden flex items-center">
                         <Button 
                             variant="ghost" 
                             size="icon" 
@@ -109,18 +109,45 @@ export function Navbar() {
 
                 {/* Mobile Menu Dropdown */}
                 {isMobileMenuOpen && (
-                    <div className="sm:hidden flex flex-col items-center space-y-3 px-6 pb-2 pt-2 border-t border-primary/10 animate-in slide-in-from-top-4 duration-300">
+                    <div className="lg:hidden flex flex-col items-center space-y-3 px-6 pb-2 pt-2 border-t border-primary/10 animate-in slide-in-from-top-4 duration-300">
                         {isLoggedIn ? (
                             <>
-                                <Link href={userRole === 'ADMIN' ? '/admin/dashboard' : '/member/dashboard'} className="w-full">
-                                    <Button variant="ghost" className="w-full rounded-full text-sm font-medium hover:bg-primary/10 hover:text-primary transition-all">
-                                        Dashboard
-                                    </Button>
-                                </Link>
+                                {userRole === 'ADMIN' && (
+                                    <>
+                                        <Link href="/admin/dashboard" className="w-full">
+                                            <Button variant="ghost" className="w-full rounded-full text-sm font-medium hover:bg-primary/10 hover:text-primary transition-all">Dashboard</Button>
+                                        </Link>
+                                        <Link href="/admin/members" className="w-full">
+                                            <Button variant="ghost" className="w-full rounded-full text-sm font-medium hover:bg-primary/10 hover:text-primary transition-all">Members</Button>
+                                        </Link>
+                                        <Link href="/admin/deposits" className="w-full">
+                                            <Button variant="ghost" className="w-full rounded-full text-sm font-medium hover:bg-primary/10 hover:text-primary transition-all">Deposits</Button>
+                                        </Link>
+                                        <Link href="/admin/loans" className="w-full">
+                                            <Button variant="ghost" className="w-full rounded-full text-sm font-medium hover:bg-primary/10 hover:text-primary transition-all">Loans</Button>
+                                        </Link>
+                                        <Link href="/reports" className="w-full">
+                                            <Button variant="ghost" className="w-full rounded-full text-sm font-medium hover:bg-primary/10 hover:text-primary transition-all">Reports</Button>
+                                        </Link>
+                                    </>
+                                )}
+                                {userRole === 'MEMBER' && (
+                                    <>
+                                        <Link href="/member/dashboard" className="w-full">
+                                            <Button variant="ghost" className="w-full rounded-full text-sm font-medium hover:bg-primary/10 hover:text-primary transition-all">Dashboard</Button>
+                                        </Link>
+                                        <Link href="/member/deposits" className="w-full">
+                                            <Button variant="ghost" className="w-full rounded-full text-sm font-medium hover:bg-primary/10 hover:text-primary transition-all">My Deposits</Button>
+                                        </Link>
+                                        <Link href="/member/loans/apply" className="w-full">
+                                            <Button variant="ghost" className="w-full rounded-full text-sm font-medium hover:bg-primary/10 hover:text-primary transition-all">Apply Loan</Button>
+                                        </Link>
+                                    </>
+                                )}
                                 <Button
                                     variant="outline"
                                     onClick={handleLogout}
-                                    className="w-full rounded-full border-primary/20 hover:bg-destructive/10 hover:text-destructive hover:border-destructive/30 transition-all font-medium"
+                                    className="w-full rounded-full border-primary/20 hover:bg-destructive/10 hover:text-destructive hover:border-destructive/30 transition-all font-medium mt-2"
                                 >
                                     Log out
                                 </Button>
